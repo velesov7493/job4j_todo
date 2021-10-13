@@ -71,7 +71,7 @@ public class HbmTaskStore implements TaskStore {
     @Override
     public List<Task> findAllOpened() {
         Function<Session, List> f = (s) -> {
-            String sql = "SELECT * FROM tz_tasks WHERE done>0";
+            String sql = "SELECT * FROM tz_tasks WHERE done=0";
             Query q = s.createSQLQuery(sql).addEntity(Task.class);
             return q.getResultList();
         };
