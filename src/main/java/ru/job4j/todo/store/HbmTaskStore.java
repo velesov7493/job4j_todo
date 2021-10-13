@@ -25,13 +25,13 @@ public class HbmTaskStore implements TaskStore {
         return INSTANCE;
     }
 
-    private List getRecords(Function<Session, List> s) {
+    private List select(Function<Session, List> command) {
         List result = null;
         Session session = SF.openSession();
         Transaction tx = session.beginTransaction();
         boolean error = false;
         try {
-            result = s.apply(session);
+            result = command.apply(session);
             session.flush();
         } catch (Exception ex) {
             error = true;
@@ -47,7 +47,7 @@ public class HbmTaskStore implements TaskStore {
         return result;
     }
 
-    private boolean executeDML(Consumer<Session> s) {
+    private boolean execute(Consumer<Session> s) {
         Session session = SF.openSession();
         Transaction tx = session.beginTransaction();
         boolean error = false;
@@ -75,7 +75,7 @@ public class HbmTaskStore implements TaskStore {
             Query q = s.createSQLQuery(sql).addEntity(Task.class);
             return q.getResultList();
         };
-        return getRecords(f);
+        return select(f);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class HbmTaskStore implements TaskStore {
             Query q = s.createSQLQuery(sql).addEntity(Task.class);
             return q.getResultList();
         };
-        return getRecords(f);
+        return select(f);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class HbmTaskStore implements TaskStore {
                     .addEntity(Task.class);
             return q.getResultList();
         };
-        List<Task> records = getRecords(f);
+        List<Task> records = select(f);
         if (records != null && !records.isEmpty()) {
             result = records.get(0);
         }
@@ -115,7 +115,7 @@ public class HbmTaskStore implements TaskStore {
                 s.update(value);
             }
         };
-        return executeDML(c);
+        return execute(c);
     }
 
     @Override
@@ -125,6 +125,6 @@ public class HbmTaskStore implements TaskStore {
             task.setId(id);
             s.delete(task);
         };
-        return executeDML(c);
+        return execute(c);
     }
 }
