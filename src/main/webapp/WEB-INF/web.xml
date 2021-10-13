@@ -1,0 +1,33 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Todo list</display-name>
+  <listener>
+    <listener-class>ru.job4j.todo.AppContextListener</listener-class>
+  </listener>
+  <servlet>
+    <servlet-name>HomeServlet</servlet-name>
+    <servlet-class>ru.job4j.todo.controllers.IndexServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>TasksServlet</servlet-name>
+    <servlet-class>ru.job4j.todo.controllers.TasksServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HomeServlet</servlet-name>
+    <url-pattern>/index.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>TasksServlet</servlet-name>
+    <url-pattern>/tasks.do</url-pattern>
+  </servlet-mapping>
+  <!--
+  <resource-ref>
+    <res-ref-name>jdbc/postgres</res-ref-name>
+    <res-type>javax.sql.DataSource</res-type>
+    <res-auth>Container</res-auth>
+  </resource-ref>
+  !-->
+</web-app>
