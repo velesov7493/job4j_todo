@@ -1,4 +1,4 @@
-package ru.job4j.todo.store;
+package ru.job4j.todo.store.rules;
 
 import ru.job4j.todo.persistence.Task;
 

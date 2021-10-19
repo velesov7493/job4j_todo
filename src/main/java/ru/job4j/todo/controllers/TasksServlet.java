@@ -1,6 +1,7 @@
 package ru.job4j.todo.controllers;
 
 import ru.job4j.todo.persistence.Task;
+import ru.job4j.todo.persistence.User;
 import ru.job4j.todo.services.TaskService;
 
 import javax.servlet.ServletException;
@@ -61,15 +62,13 @@ public class TasksServlet extends HttpServlet {
         HttpSession s = req.getSession();
         req.setCharacterEncoding("UTF-8");
         TaskService service = TaskService.getInstance();
-        String sid = req.getParameter("nId");
-        String sdone = req.getParameter("nDone");
-        int id = sid == null || sid.isEmpty() ? 0 : Integer.parseInt(sid);
-        short done = "on".equals(sdone) ? (short) 1 : 0;
-        Task t = id == 0 ? new Task() : service.getById(id);
+        short done = "on".equals(req.getParameter("nDone")) ? (short) 1 : 0;
+        Task t = new Task();
         t.setDescription(req.getParameter("nDescription"));
+        t.setAuthor((User) req.getSession().getAttribute("user"));
         t.setDone(done);
         if (!service.save(t)) {
-            s.setAttribute("error", "Ошибка сохранения задачи!");
+            s.setAttribute("error", "Ошибка создания задачи!");
         }
         resp.sendRedirect(req.getContextPath() + "/index.do");
     }
@@ -81,10 +80,17 @@ public class TasksServlet extends HttpServlet {
         TaskService service = TaskService.getInstance();
         String sid = req.getParameter("id");
         int id = sid == null ? 0 : Integer.parseInt(sid);
-        if (service.deleteById(id)) {
-            resp.setStatus(200);
-        } else {
-            resp.setStatus(404);
-        }
+        resp.setStatus(service.deleteById(id) ? 200 : 404);
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp)
+        throws ServletException, IOException {
+
+        req.setCharacterEncoding("UTF-8");
+        TaskService service = TaskService.getInstance();
+        Task t = service.jsonReadFromStream(req.getInputStream());
+        t.setAuthor((User) req.getSession().getAttribute("user"));
+        resp.setStatus(service.patch(t) ? 200 : 406);
     }
 }
