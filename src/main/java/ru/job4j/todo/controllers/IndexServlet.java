@@ -14,6 +14,6 @@ public class IndexServlet extends HttpServlet {
 
         req.setAttribute("pageTitle", "Список задач");
         req.setAttribute("isServlet", true);
-        req.getRequestDispatcher("views/task/index.jsp").forward(req, resp);
+        req.getRequestDispatcher("views/task/list.jsp").forward(req, resp);
     }
 }

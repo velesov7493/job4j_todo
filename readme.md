@@ -1,7 +1,10 @@
 [![Build Status](https://app.travis-ci.com/velesov7493/job4j_todo.svg?branch=master)](https://app.travis-ci.com/velesov7493/job4j_todo)
 ## Описание ##
-Это учебный проект простого одностраничного приложения - информационной системы учета дел или заданий.
-Пользователю доступны все операции над заданиями: создание, просмотр, редактирование и удаление. 
+Это учебный проект информационной системы учета дел или заданий.
+
+Авторизованному пользователю доступны все операции над заданиями: создание, просмотр, редактирование и удаление.
+
+Неавторизованный пользователь может только просматривать задания. 
 #### Технологии проекта ####
 ![badge](https://img.shields.io/badge/PostgreSQL-9.5-blue)
 ![badge](https://img.shields.io/badge/Tomcat-8.5-blue)
@@ -12,5 +15,9 @@
 ![badge](https://img.shields.io/badge/jQuery-3.6-yellow)
 ![badge](https://img.shields.io/badge/FontAwesome-4.0-yellow)
 ## Скриншоты ##
-#### Главная страница ####
+#### Список заданий ####
 ![screenshoot](images/img001.png)
+#### Форма авторизации ####
+![screenshoot](images/img002.png)
+#### Форма регистрации ####
+![screenshoot](images/img003.png)
