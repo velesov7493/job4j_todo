@@ -2,6 +2,7 @@ package ru.job4j.todo.persistence;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tz_tasks")
@@ -15,6 +16,9 @@ public class Task {
     private String description;
     @Column(insertable = false)
     private Date created;
+    @ManyToOne
+    @JoinColumn(name = "id_author")
+    private User author;
 
     public Task() { }
 
@@ -48,5 +52,35 @@ public class Task {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Task task = (Task) o;
+        return
+                id == task.id
+                && done == task.done
+                && Objects.equals(description, task.description)
+                && Objects.equals(created, task.created)
+                && Objects.equals(author, task.author);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, done, description, created, author);
     }
 }

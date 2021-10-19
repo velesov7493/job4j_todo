@@ -2,11 +2,13 @@ package ru.job4j.todo.services;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import ru.job4j.todo.AppUtils;
 import ru.job4j.todo.persistence.Task;
 import ru.job4j.todo.store.HbmTaskStore;
-import ru.job4j.todo.store.TaskStore;
+import ru.job4j.todo.store.rules.TaskStore;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -19,10 +21,7 @@ public class TaskService {
     private final TaskStore store;
 
     private TaskService() {
-        gson =
-                new GsonBuilder()
-                .setDateFormat("dd.MM.yyyy")
-                .create();
+        gson = AppUtils.getGson();
         store = HbmTaskStore.getInstance();
     }
 
@@ -50,6 +49,13 @@ public class TaskService {
         return store.deleteById(id);
     }
 
+    public boolean patch(Task value) {
+        Task oldVal = store.getById(value.getId());
+        oldVal.setDone(value.getDone());
+        oldVal.setDescription(value.getDescription());
+        return store.save(oldVal);
+    }
+
     public void jsonWriteToStream(List<Task> records, OutputStream out) throws IOException {
         String json = gson.toJson(records);
         out.write(json.getBytes(StandardCharsets.UTF_8));
@@ -62,5 +68,10 @@ public class TaskService {
         out.write(json.getBytes(StandardCharsets.UTF_8));
         out.flush();
         out.close();
+    }
+
+    public Task jsonReadFromStream(InputStream in) throws IOException {
+        String json = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+        return gson.fromJson(json, Task.class);
     }
 }

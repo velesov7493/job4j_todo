@@ -7,6 +7,10 @@ function taskDelete(taskId) {
             $('#err-text').val('Элемент с индексом ' + taskId + ' не найден.');
             $('.error-panel').removeClass('hidden');
          },
+         403: function () {
+            $('#err-text').html('Доступ запрещен. Авторизуйтесь чтобы изменять данные.');
+            $('.error-panel').removeClass('hidden');
+         },
          200: function () {
             location.reload();
          }
@@ -14,7 +18,7 @@ function taskDelete(taskId) {
    });
 }
 
-function taskEdit(taskId) {
+function taskGet(taskId) {
    $.ajax({
       type: 'GET',
       url: 'http://localhost:8080/todo/tasks.do?id=' + taskId,
@@ -34,6 +38,32 @@ function taskEdit(taskId) {
    });
 }
 
+function taskUpdate(taskId) {
+   $.ajax({
+      type: 'PUT',
+      url: 'http://localhost:8080/todo/tasks.do',
+      dataType: 'json',
+      data: {
+         id: taskId,
+         description: $('#task-description').html(),
+         done: $('#task-done').val() === 'on' ? 1 : 0,
+      },
+      statusCode: {
+         406: function () {
+            $('#err-text').html('Провал изменения элемента индексом ' + taskId);
+            $('.error-panel').removeClass('hidden');
+         },
+         403: function () {
+            $('#err-text').html('Доступ запрещен. Авторизуйтесь чтобы изменять данные.');
+            $('.error-panel').removeClass('hidden');
+         },
+         200: function () {
+            location.reload();
+         }
+      }
+   });
+}
+
 function refreshRecords(surl) {
    let mContent = '';
    $('.table tbody').html(mContent);
@@ -47,15 +77,23 @@ function refreshRecords(surl) {
       }
       for (let task of data) {
          let status = task.done !== 0 ? '<i class="fa fa-check-square-o"></i>' : '<i class="fa fa-square-o"></i>';
-         let actions = '<button class="btn btn-outline-secondary" onclick="taskEdit('+ task.id + ')"><i class="fa fa-edit"></i></button>&nbsp;<button class="btn btn-outline-secondary" onclick="taskDelete('+ task.id +')"><i class="fa fa-times"></i></button>';
-         let line = '<tr><td>' + status + '</td><td>' + task.description + '</td><td>' + task.created + '</td><td>' + actions + '</td></tr>';
+         let actions = '<button class="btn btn-outline-secondary" onclick="taskGet('+ task.id + ')"><i class="fa fa-edit"></i></button>&nbsp;<button class="btn btn-outline-secondary" onclick="taskDelete('+ task.id +')"><i class="fa fa-times"></i></button>';
+         let line = '<tr><td>' + status + '</td><td>' + task.description + '</td><td>' + task.author.login + '</td><td>' + task.created + '</td><td>' + actions + '</td></tr>';
          mContent += line;
       }
-      $('.table tbody').html(mContent);
+      $('#datatable tbody').html(mContent);
    }).fail(function(err) {
       console.log(err);
    });
 }
+
+$('#task-submit').click(function() {
+   let taskId = $('#task-id').val();
+   if (taskId > 0) {
+      taskUpdate(taskId);
+      return false;
+   }
+});
 
 $(document).ready(function() {
    refreshRecords('http://localhost:8080/todo/tasks.do?scope=all');

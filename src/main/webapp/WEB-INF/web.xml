@@ -4,6 +4,14 @@
 
 <web-app>
   <display-name>Todo list</display-name>
+  <filter>
+    <filter-name>AuthFilter</filter-name>
+    <filter-class>ru.job4j.todo.filters.AuthFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AuthFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
   <listener>
     <listener-class>ru.job4j.todo.AppContextListener</listener-class>
   </listener>
@@ -15,6 +23,22 @@
     <servlet-name>TasksServlet</servlet-name>
     <servlet-class>ru.job4j.todo.controllers.TasksServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>AuthServlet</servlet-name>
+    <servlet-class>ru.job4j.todo.controllers.AuthServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>LogoutServlet</servlet-name>
+    <servlet-class>ru.job4j.todo.controllers.LogoutServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>RegisterServlet</servlet-name>
+    <servlet-class>ru.job4j.todo.controllers.RegisterServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>RolesServlet</servlet-name>
+    <servlet-class>ru.job4j.todo.controllers.RolesServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>HomeServlet</servlet-name>
     <url-pattern>/index.do</url-pattern>
@@ -22,5 +46,21 @@
   <servlet-mapping>
     <servlet-name>TasksServlet</servlet-name>
     <url-pattern>/tasks.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AuthServlet</servlet-name>
+    <url-pattern>/auth.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LogoutServlet</servlet-name>
+    <url-pattern>/logout.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RegisterServlet</servlet-name>
+    <url-pattern>/register.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RolesServlet</servlet-name>
+    <url-pattern>/roles.do</url-pattern>
   </servlet-mapping>
 </web-app>
