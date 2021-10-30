@@ -54,11 +54,7 @@ public class RolesAjaxServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         RoleService service = RoleService.getInstance();
         Role r = service.jsonReadFromStream(req.getInputStream());
-        if (req.getSession().getAttribute("user") != null) {
-            resp.setStatus(service.save(r) ? 200 : 406);
-        } else {
-            resp.setStatus(403);
-        }
+        resp.setStatus(service.save(r) ? 200 : 406);
     }
 
     @Override
@@ -68,10 +64,6 @@ public class RolesAjaxServlet extends HttpServlet {
         RoleService service = RoleService.getInstance();
         String sid = req.getParameter("id");
         int id = sid == null ? 0 : Integer.parseInt(sid);
-        if (req.getSession().getAttribute("user") != null) {
-            resp.setStatus(service.deleteById(id) ? 200 : 404);
-        } else {
-            resp.setStatus(403);
-        }
+        resp.setStatus(service.deleteById(id) ? 200 : 404);
     }
 }
