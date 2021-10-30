@@ -25,7 +25,8 @@
         </div>
         <div class="row header-bottom">
             <ul class="menu">
-                <li class="item-left"><a class="btn btn-outline-dark" href="<%=request.getContextPath()%>/index.do"><i class="fa fa-tasks"></i> Задачи</a></li>
+                <li class="item-left"><a class="btn btn-outline-dark" href="<%=request.getContextPath()%>/roles.do"><i class="fa fa-chain"></i> Роли</a></li>
+                <li class="item-left"><a class="btn btn-outline-dark" href="<%=request.getContextPath()%>/tasks.do"><i class="fa fa-tasks"></i> Задачи</a></li>
                 <% if (user == null) { %>
                 <li class="item-right"><a class="btn btn-outline-dark" href="<%=request.getContextPath()%>/auth.do"><i class="fa fa-lock"></i> Вход</a></li>
                 <li class="item-right"><a class="btn btn-outline-dark" href="<%=request.getContextPath()%>/register.do"><i class="fa fa-check-circle-o"></i> Регистрация</a></li>

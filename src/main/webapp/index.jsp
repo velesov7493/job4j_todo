@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="refresh" content="0;URL=http://localhost:8080/todo/index.do" />
+    <meta http-equiv="refresh" content="0;URL=http://localhost:8080/todo/tasks.do" />
     <title>Перенапраление на список задач</title>
 </head>
 </html>

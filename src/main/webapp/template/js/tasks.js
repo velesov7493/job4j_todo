@@ -1,72 +1,8 @@
-function taskDelete(taskId) {
-   $.ajax({
-      type: 'DELETE',
-      url: 'http://localhost:8080/todo/tasks.do?id=' + taskId,
-      statusCode: {
-         404: function () {
-            $('#err-text').val('Элемент с индексом ' + taskId + ' не найден.');
-            $('.error-panel').removeClass('hidden');
-         },
-         403: function () {
-            $('#err-text').html('Доступ запрещен. Авторизуйтесь чтобы изменять данные.');
-            $('.error-panel').removeClass('hidden');
-         },
-         200: function () {
-            location.reload();
-         }
-      }
-   });
-}
-
-function taskGet(taskId) {
-   $.ajax({
-      type: 'GET',
-      url: 'http://localhost:8080/todo/tasks.do?id=' + taskId,
-      dataType: 'json'
-   }).done(function (data) {
-      $('#task-id').val(data.id);
-      $('#task-description').html(data.description);
-      if (data.done > 0) {
-         $('#task-done').attr('checked','1');
-      } else {
-         $('#task-done').removeAttr('checked');
-      }
-   }).fail(function(err) {
-      $('#err-text').val('Провал получения элемента с индексом ' + taskId);
-      $('#err-data').val(err);
-      $('.error-panel').removeClass('hidden');
-   });
-}
-
-function taskUpdate(taskId) {
-   $.ajax({
-      type: 'PUT',
-      url: 'http://localhost:8080/todo/tasks.do',
-      dataType: 'json',
-      data: {
-         id: taskId,
-         description: $('#task-description').html(),
-         done: $('#task-done').val() === 'on' ? 1 : 0,
-      },
-      statusCode: {
-         406: function () {
-            $('#err-text').html('Провал изменения элемента индексом ' + taskId);
-            $('.error-panel').removeClass('hidden');
-         },
-         403: function () {
-            $('#err-text').html('Доступ запрещен. Авторизуйтесь чтобы изменять данные.');
-            $('.error-panel').removeClass('hidden');
-         },
-         200: function () {
-            location.reload();
-         }
-      }
-   });
-}
-
-function refreshRecords(surl) {
+function refreshRecords() {
+   let scope = $('#show-opened').hasClass('btn-primary') ? 'open' : 'all';
+   let surl = 'http://localhost:8080/todo/tasks.ajax?scope=' + scope;
    let mContent = '';
-   $('.table tbody').html(mContent);
+   $('#datatable tbody').html(mContent);
    $.ajax({
       type: 'GET',
       url: surl,
@@ -87,8 +23,75 @@ function refreshRecords(surl) {
    });
 }
 
+function taskDelete(taskId) {
+   $.ajax({
+      type: 'DELETE',
+      url: 'http://localhost:8080/todo/tasks.ajax?id=' + taskId,
+      statusCode: {
+         404: function () {
+            $('#err-text').val('Элемент с индексом ' + taskId + ' не найден.');
+            $('.error-panel').removeClass('hidden');
+         },
+         403: function () {
+            $('#err-text').html('Доступ запрещен. Авторизуйтесь чтобы изменять данные.');
+            $('.error-panel').removeClass('hidden');
+         },
+         200: function () {
+            refreshRecords();
+         }
+      }
+   });
+}
+
+function taskGet(taskId) {
+   $.ajax({
+      type: 'GET',
+      url: 'http://localhost:8080/todo/tasks.ajax?id=' + taskId,
+      dataType: 'json'
+   }).done(function (data) {
+      $('#task-id').val(data.id);
+      $('#task-description').html(data.description);
+      if (data.done > 0) {
+         $('#task-done').attr('checked','1');
+      } else {
+         $('#task-done').removeAttr('checked');
+      }
+   }).fail(function(err) {
+      $('#err-text').val('Провал получения элемента с индексом ' + taskId);
+      $('#err-data').val(err);
+      $('.error-panel').removeClass('hidden');
+   });
+}
+
+function taskUpdate(taskId) {
+   $.ajax({
+      type: 'PUT',
+      url: 'http://localhost:8080/todo/tasks.ajax',
+      contentType: 'application/json; charset=UTF-8',
+      processData: false,
+      data: JSON.stringify({
+         id: taskId,
+         description: $('#task-description').val(),
+         done: $('#task-done').is(':checked') ? 1 : 0
+      }),
+      statusCode: {
+         406: function () {
+            $('#err-text').html('Провал изменения элемента индексом ' + taskId);
+            $('.error-panel').removeClass('hidden');
+         },
+         403: function () {
+            $('#err-text').html('Доступ запрещен. Авторизуйтесь чтобы изменять данные.');
+            $('.error-panel').removeClass('hidden');
+         },
+         200: function () {
+            refreshRecords();
+         }
+      }
+   });
+}
+
 $('#task-submit').click(function() {
-   let taskId = $('#task-id').val();
+   let taskId = Number($('#task-id').val());
    if (taskId > 0) {
       taskUpdate(taskId);
       return false;
@@ -96,7 +99,7 @@ $('#task-submit').click(function() {
 });
 
 $(document).ready(function() {
-   refreshRecords('http://localhost:8080/todo/tasks.do?scope=all');
+   refreshRecords();
 });
 
 $('#show-all').click(function() {
@@ -105,7 +108,7 @@ $('#show-all').click(function() {
        .addClass('btn-secondary');
    $(this).removeClass('btn-secondary');
    $(this).addClass('btn-primary');
-   refreshRecords('http://localhost:8080/todo/tasks.do?scope=all');
+   refreshRecords();
 });
 
 $('#show-opened').click(function() {
@@ -114,5 +117,5 @@ $('#show-opened').click(function() {
        .addClass('btn-secondary');
    $(this).removeClass('btn-secondary');
    $(this).addClass('btn-primary');
-   refreshRecords('http://localhost:8080/todo/tasks.do?scope=open');
+   refreshRecords();
 });

@@ -2,7 +2,7 @@
 
 <%
     if (request.getAttribute("isServlet") == null) {
-        response.sendRedirect(request.getContextPath() + "/index.do");
+        response.sendRedirect(request.getContextPath() + "/tasks.do");
     }
     HttpSession s = request.getSession();
     String error = (String) s.getAttribute("error");

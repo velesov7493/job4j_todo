@@ -15,6 +15,12 @@ public class Role {
 
     public Role() { }
 
+    public static Role of(String aName) {
+        Role r = new Role();
+        r.setName(aName);
+        return r;
+    }
+
     public int getId() {
         return id;
     }

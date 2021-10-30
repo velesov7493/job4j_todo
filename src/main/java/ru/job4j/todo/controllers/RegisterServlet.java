@@ -61,6 +61,6 @@ public class RegisterServlet extends HttpServlet {
         }
         HttpSession sc = req.getSession();
         sc.setAttribute("user", usr);
-        resp.sendRedirect(req.getContextPath() + "/index.do");
+        resp.sendRedirect(req.getContextPath() + "/tasks.do");
     }
 }

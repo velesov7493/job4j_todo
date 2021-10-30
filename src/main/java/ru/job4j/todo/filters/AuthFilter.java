@@ -35,7 +35,7 @@ public class AuthFilter implements Filter {
         String method = req.getMethod().toUpperCase();
         if (
             !"GET".equals(method)
-            && (uri.endsWith("tasks.do") || uri.endsWith("roles.do"))
+            && (uri.endsWith("tasks.do") || uri.endsWith("roles.do") || uri.endsWith(".ajax"))
             && req.getSession().getAttribute("user") == null
         ) {
             if ("POST".equals(method)) {

@@ -21,3 +21,5 @@
 ![screenshoot](images/img002.png)
 #### Форма регистрации ####
 ![screenshoot](images/img003.png)
+#### Список ролей ####
+![screenshoot](images/img004.png)

@@ -16,12 +16,16 @@
     <listener-class>ru.job4j.todo.AppContextListener</listener-class>
   </listener>
   <servlet>
-    <servlet-name>HomeServlet</servlet-name>
-    <servlet-class>ru.job4j.todo.controllers.IndexServlet</servlet-class>
-  </servlet>
-  <servlet>
     <servlet-name>TasksServlet</servlet-name>
     <servlet-class>ru.job4j.todo.controllers.TasksServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>TasksAjaxServlet</servlet-name>
+    <servlet-class>ru.job4j.todo.controllers.TasksAjaxServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>RolesServlet</servlet-name>
+    <servlet-class>ru.job4j.todo.controllers.RolesServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>AuthServlet</servlet-name>
@@ -36,16 +40,16 @@
     <servlet-class>ru.job4j.todo.controllers.RegisterServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>RolesServlet</servlet-name>
-    <servlet-class>ru.job4j.todo.controllers.RolesServlet</servlet-class>
+    <servlet-name>RolesAjaxServlet</servlet-name>
+    <servlet-class>ru.job4j.todo.controllers.RolesAjaxServlet</servlet-class>
   </servlet>
-  <servlet-mapping>
-    <servlet-name>HomeServlet</servlet-name>
-    <url-pattern>/index.do</url-pattern>
-  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>TasksServlet</servlet-name>
     <url-pattern>/tasks.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>TasksAjaxServlet</servlet-name>
+    <url-pattern>/tasks.ajax</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>AuthServlet</servlet-name>
@@ -62,5 +66,9 @@
   <servlet-mapping>
     <servlet-name>RolesServlet</servlet-name>
     <url-pattern>/roles.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RolesAjaxServlet</servlet-name>
+    <url-pattern>/roles.ajax</url-pattern>
   </servlet-mapping>
 </web-app>
