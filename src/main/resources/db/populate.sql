@@ -7,8 +7,8 @@ INSERT INTO tz_users (id_role, login, name, password) VALUES
 INSERT INTO tz_categories (name) VALUES
 ('Программирование'), ('Обучение'), ('Книги'), ('Фильмы'), ('Очередь на просмотр-прочтение');
 
-INSERT INTO tz_tasks (id_author, done, description, created) VALUES
-(1, 1, 'Обновление структуры базы данных', '2021-10-17');
+INSERT INTO tz_tasks (id_author, done, description) VALUES
+(1, 1, 'Обновление структуры базы данных');
 
 INSERT INTO tr_tasks_categories (id_task, id_category) VALUES
 (1, 1), (1, 2);

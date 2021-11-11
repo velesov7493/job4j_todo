@@ -16,7 +16,7 @@ public class Task {
     private int id;
     private short done;
     private String description;
-    @Column(insertable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date created;
     @ManyToOne
     @JoinColumn(name = "id_author")

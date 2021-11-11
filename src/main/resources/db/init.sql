@@ -32,7 +32,7 @@ CREATE TABLE tz_tasks (
     id_author INTEGER NOT NULL REFERENCES tz_users (id) ON DELETE CASCADE,
     done SMALLINT DEFAULT 0,
     description TEXT NOT NULL,
-    created DATE DEFAULT current_date
+    created TIMESTAMP DEFAULT current_timestamp
 );
 
 CREATE TABLE tr_tasks_categories (
