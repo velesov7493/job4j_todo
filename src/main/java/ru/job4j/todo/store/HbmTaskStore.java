@@ -22,8 +22,10 @@ public class HbmTaskStore extends GenericStore implements TaskStore {
     @Override
     public List<Task> findAllOpened() {
         Function<Session, List> f = (s) -> {
-            String sql = "SELECT * FROM tz_tasks WHERE done=0";
-            Query q = s.createSQLQuery(sql).addEntity(Task.class);
+            String hql =
+                    "SELECT DISTINCT t FROM Task t "
+                    + "JOIN FETCH t.categories WHERE t.done=0";
+            Query q = s.createQuery(hql);
             return q.getResultList();
         };
         return select(f);
@@ -32,8 +34,10 @@ public class HbmTaskStore extends GenericStore implements TaskStore {
     @Override
     public List<Task> findAll() {
         Function<Session, List> f = (s) -> {
-            String sql = "SELECT * FROM tz_tasks";
-            Query q = s.createSQLQuery(sql).addEntity(Task.class);
+            String hql =
+                    "SELECT DISTINCT t FROM Task t "
+                    + "JOIN FETCH t.categories";
+            Query q = s.createQuery(hql);
             return q.getResultList();
         };
         return select(f);
@@ -42,11 +46,13 @@ public class HbmTaskStore extends GenericStore implements TaskStore {
     @Override
     public Task getById(Integer id) {
         Function<Session, Task> f = (s) -> {
-            String sql = "SELECT * FROM tz_tasks WHERE id=?";
+            String hql =
+                    "SELECT t FROM Task t "
+                    + "JOIN FETCH t.categories "
+                    + "WHERE t.id=:tid";
             Query q =
-                    s.createSQLQuery(sql)
-                    .setParameter(1, id)
-                    .addEntity(Task.class);
+                    s.createQuery(hql)
+                    .setParameter("tid", id);
             return (Task) q.getSingleResult();
         };
         return select(f);

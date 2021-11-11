@@ -23,6 +23,27 @@ function refreshRecords() {
    });
 }
 
+function refreshCategories() {
+   let mContent = '';
+   $('#task-categories').html(mContent);
+   $.ajax({
+      type: 'GET',
+      url: 'http://localhost:8080/todo/categories.ajax',
+      dataType: 'json'
+   }).done(function (data) {
+      if (data === undefined) {
+         return false;
+      }
+      for (let category of data) {
+         let line = '<option value="' + category.id + '">' + category.name + '</option>';
+         mContent += line;
+      }
+      $('#task-categories').html(mContent);
+   }).fail(function(err) {
+      console.log(err);
+   });
+}
+
 function taskDelete(taskId) {
    $.ajax({
       type: 'DELETE',
@@ -56,6 +77,9 @@ function taskGet(taskId) {
       } else {
          $('#task-done').removeAttr('checked');
       }
+      for (let category of data.categories) {
+         $(`#task-categories option[value="${category.id}"]`).prop('selected', true);
+      }
    }).fail(function(err) {
       $('#err-text').val('Провал получения элемента с индексом ' + taskId);
       $('#err-data').val(err);
@@ -72,7 +96,8 @@ function taskUpdate(taskId) {
       data: JSON.stringify({
          id: taskId,
          description: $('#task-description').val(),
-         done: $('#task-done').is(':checked') ? 1 : 0
+         done: $('#task-done').is(':checked') ? 1 : 0,
+         categoryIds: $('#task-categories').val()
       }),
       statusCode: {
          406: function () {
@@ -100,6 +125,7 @@ $('#task-submit').click(function() {
 
 $(document).ready(function() {
    refreshRecords();
+   refreshCategories();
 });
 
 $('#show-all').click(function() {

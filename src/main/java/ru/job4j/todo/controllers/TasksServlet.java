@@ -2,6 +2,7 @@ package ru.job4j.todo.controllers;
 
 import ru.job4j.todo.persistence.Task;
 import ru.job4j.todo.persistence.User;
+import ru.job4j.todo.services.CategoryService;
 import ru.job4j.todo.services.TaskService;
 
 import javax.servlet.ServletException;
@@ -29,12 +30,14 @@ public class TasksServlet extends HttpServlet {
         HttpSession s = req.getSession();
         req.setCharacterEncoding("UTF-8");
         TaskService service = TaskService.getInstance();
+        CategoryService categoryService = CategoryService.getInstance();
         short done = "on".equals(req.getParameter("nDone")) ? (short) 1 : 0;
+        String[] categoryIds = req.getParameterValues("nCategories");
         Task t = new Task();
         t.setDescription(req.getParameter("nDescription"));
         t.setAuthor((User) req.getSession().getAttribute("user"));
         t.setDone(done);
-        if (!service.save(t)) {
+        if (!service.saveWithCategories(t, categoryIds)) {
             s.setAttribute("error", "Ошибка создания задачи!");
         }
         resp.sendRedirect(req.getContextPath() + "/tasks.do");

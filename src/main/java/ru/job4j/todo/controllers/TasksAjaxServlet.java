@@ -1,7 +1,9 @@
 package ru.job4j.todo.controllers;
 
+import ru.job4j.todo.persistence.NetTask;
 import ru.job4j.todo.persistence.Task;
 import ru.job4j.todo.persistence.User;
+import ru.job4j.todo.services.JsonService;
 import ru.job4j.todo.services.TaskService;
 
 import javax.servlet.ServletException;
@@ -21,7 +23,8 @@ public class TasksAjaxServlet extends HttpServlet {
         Task result = service.getById(id);
         resp.setContentType("application/json; charset=utf-8");
         if (result != null) {
-            service.jsonWriteToStreamSingleTask(result, resp.getOutputStream());
+            JsonService js = JsonService.getInstance();
+            js.jsonWriteToStream(result, resp.getOutputStream());
             resp.setStatus(200);
         } else {
             resp.setStatus(404);
@@ -47,7 +50,8 @@ public class TasksAjaxServlet extends HttpServlet {
             records = service.findAllOpened();
         }
         if (records != null && !records.isEmpty()) {
-            service.jsonWriteToStream(records, resp.getOutputStream());
+            JsonService js = JsonService.getInstance();
+            js.jsonWriteToStream(records, resp.getOutputStream());
             resp.setStatus(200);
         } else {
             resp.setStatus(204);
@@ -70,8 +74,10 @@ public class TasksAjaxServlet extends HttpServlet {
 
         req.setCharacterEncoding("UTF-8");
         TaskService service = TaskService.getInstance();
-        Task t = service.jsonReadFromStream(req.getInputStream());
+        JsonService js = JsonService.getInstance();
+        NetTask nt = js.jsonReadFromStream(req.getInputStream(), NetTask.class);
+        Task t = nt.copyTask();
         t.setAuthor((User) req.getSession().getAttribute("user"));
-        resp.setStatus(service.patch(t) ? 200 : 406);
+        resp.setStatus(service.patch(t, nt.getCategoryIds()) ? 200 : 406);
     }
 }

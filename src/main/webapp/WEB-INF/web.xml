@@ -43,6 +43,10 @@
     <servlet-name>RolesAjaxServlet</servlet-name>
     <servlet-class>ru.job4j.todo.controllers.RolesAjaxServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>CategoriesAjaxServlet</servlet-name>
+    <servlet-class>ru.job4j.todo.controllers.CategoriesAjaxServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>TasksServlet</servlet-name>
     <url-pattern>/tasks.do</url-pattern>
@@ -70,5 +74,9 @@
   <servlet-mapping>
     <servlet-name>RolesAjaxServlet</servlet-name>
     <url-pattern>/roles.ajax</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CategoriesAjaxServlet</servlet-name>
+    <url-pattern>/categories.ajax</url-pattern>
   </servlet-mapping>
 </web-app>

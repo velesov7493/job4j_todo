@@ -1,27 +1,19 @@
 package ru.job4j.todo.services;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import ru.job4j.todo.AppUtils;
 import ru.job4j.todo.persistence.Task;
 import ru.job4j.todo.store.HbmTaskStore;
 import ru.job4j.todo.store.rules.TaskStore;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Set;
 
 public class TaskService {
 
     private static final TaskService INSTANCE = new TaskService();
 
-    private final Gson gson;
     private final TaskStore store;
 
     private TaskService() {
-        gson = AppUtils.getGson();
         store = HbmTaskStore.getInstance();
     }
 
@@ -49,29 +41,29 @@ public class TaskService {
         return store.deleteById(id);
     }
 
-    public boolean patch(Task value) {
+    public boolean patch(Task value, Set<Integer> categoryIds) {
         Task oldVal = store.getById(value.getId());
         oldVal.setDone(value.getDone());
         oldVal.setDescription(value.getDescription());
+        if (categoryIds != null && !categoryIds.isEmpty()) {
+            CategoryService cs = CategoryService.getInstance();
+            oldVal.getCategories().clear();
+            for (int categoryId : categoryIds) {
+                oldVal.addCategory(cs.getById(categoryId));
+            }
+        }
         return store.save(oldVal);
     }
 
-    public void jsonWriteToStream(List<Task> records, OutputStream out) throws IOException {
-        String json = gson.toJson(records);
-        out.write(json.getBytes(StandardCharsets.UTF_8));
-        out.flush();
-        out.close();
-    }
-
-    public void jsonWriteToStreamSingleTask(Task task, OutputStream out) throws IOException {
-        String json = gson.toJson(task);
-        out.write(json.getBytes(StandardCharsets.UTF_8));
-        out.flush();
-        out.close();
-    }
-
-    public Task jsonReadFromStream(InputStream in) throws IOException {
-        String json = new String(in.readAllBytes(), StandardCharsets.UTF_8);
-        return gson.fromJson(json, Task.class);
+    public boolean saveWithCategories(Task value, String[] categoryIds) {
+        if (value.getId() == 0 && !store.save(value)) {
+            return false;
+        }
+        CategoryService cs = CategoryService.getInstance();
+        value.getCategories().clear();
+        for (String categoryId : categoryIds) {
+            value.addCategory(cs.getById(Integer.parseInt(categoryId)));
+        }
+        return store.save(value);
     }
 }

@@ -28,6 +28,10 @@
                     <label for="task-description">Описание задания:</label>
                     <textarea name="nDescription" class="form-control" id="task-description" required></textarea>
                 </div>
+                <div class="form-group">
+                    <label for="task-categories">Категории:</label>
+                    <select class="form-control" name="nCategories" id="task-categories" multiple required></select>
+                </div>
                 <div class="form-check">
                     <input name="nDone" class="form-check-input" id="task-done" type="checkbox" />
                     <label class="form-check-label" for="task-done">Задание выполнено</label>

@@ -1,6 +1,7 @@
 package ru.job4j.todo.controllers;
 
 import ru.job4j.todo.persistence.Role;
+import ru.job4j.todo.services.JsonService;
 import ru.job4j.todo.services.RoleService;
 
 import javax.servlet.ServletException;
@@ -20,7 +21,8 @@ public class RolesAjaxServlet extends HttpServlet {
         Role result = service.getById(id);
         resp.setContentType("application/json; charset=utf-8");
         if (result != null) {
-            service.jsonWriteToStreamSingleRole(result, resp.getOutputStream());
+            JsonService js = JsonService.getInstance();
+            js.jsonWriteToStream(result, resp.getOutputStream());
             resp.setStatus(200);
         } else {
             resp.setStatus(404);
@@ -40,7 +42,8 @@ public class RolesAjaxServlet extends HttpServlet {
         resp.setContentType("application/json; charset=utf-8");
         List<Role> records = service.findAll();
         if (records != null && !records.isEmpty()) {
-            service.jsonWriteToStream(records, resp.getOutputStream());
+            JsonService js = JsonService.getInstance();
+            js.jsonWriteToStream(records, resp.getOutputStream());
             resp.setStatus(200);
         } else {
             resp.setStatus(204);
@@ -53,7 +56,8 @@ public class RolesAjaxServlet extends HttpServlet {
 
         req.setCharacterEncoding("UTF-8");
         RoleService service = RoleService.getInstance();
-        Role r = service.jsonReadFromStream(req.getInputStream());
+        JsonService js = JsonService.getInstance();
+        Role r = js.jsonReadFromStream(req.getInputStream(), Role.class);
         resp.setStatus(service.save(r) ? 200 : 406);
     }
 

@@ -2,7 +2,9 @@ package ru.job4j.todo.persistence;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tz_tasks")
@@ -19,8 +21,18 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "id_author")
     private User author;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "tr_tasks_categories",
+            joinColumns = @JoinColumn(name = "id_task"),
+            inverseJoinColumns = @JoinColumn(name = "id_category")
+    )
+    private Set<Category> categories;
 
-    public Task() { }
+    public Task() {
+        categories = new HashSet<>();
+        created = new Date();
+    }
 
     public int getId() {
         return id;
@@ -60,6 +72,18 @@ public class Task {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public void addCategory(Category value) {
+        categories.add(value);
+    }
+
+    public void deleteCategory(Category value) {
+        categories.remove(value);
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
     }
 
     @Override
